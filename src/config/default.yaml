@@ -1,0 +1,6 @@
+priceData:
+  symbol: ETH
+  market: USD
+  outputsize: full  # (Allowed values: full, compact)
+  interval: 5min  # (Allowed values: 1min, 5min, 15min, 30min, 60min)
+
