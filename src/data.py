@@ -1,7 +1,10 @@
+import numpy
 import requests
 import json
 import yaml
 import pandas as pd
+import numpy as np
+import tensorflow as tf
 
 from scaler import Scaler
 
@@ -54,7 +57,7 @@ if __name__ == '__main__':
     # Format raw data for data frame
     for interval in price_data:
         price = float(price_data[interval]['1. open'])
-        price_data_list.append({"time": interval, "price": price})
+        price_data_list.append({"price": price})
 
     # Create dataframe
     df = pd.DataFrame(price_data_list)
@@ -63,5 +66,16 @@ if __name__ == '__main__':
     scaled_data = Scaler(df["price"]).min_max_scale()
     df['scale'] = scaled_data
 
-    print(df)
+    df['nextprice'] = df['price'].shift(1)
+    df.dropna(inplace=True)
+
+
+    tensor = tf.data.Dataset.from_tensor_slices((df[['price', 'scale']], df['nextprice']))
+
+    for row in tensor.take(3):
+        print(row)
+
+
+
+
 
